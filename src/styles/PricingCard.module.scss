@@ -1,0 +1,608 @@
+@use "mixins" as *;
+
+$pricing-card-accent: #ff4ab7;
+$pricing-card-text: #ffffff;
+$pricing-card-text-muted: #beacc7;
+$pricing-card-text-subtle: #8f7f9a;
+
+$pricing-card-border-default: #be4eff80;
+$pricing-card-surface-default: linear-gradient(
+  92.6deg,
+  rgba(190, 78, 255, 0.06) 37.84%,
+  rgba(255, 74, 183, 0.06) 100%
+);
+$pricing-card-shadow-default: 0px 0px 48px 0px #00000073;
+
+
+$pricing-card-border-hover: linear-gradient(
+  180.05deg,
+  rgba(230, 188, 255, 0.6) 0.04%,
+  rgba(111, 47, 149, 0.6) 99.96%
+);
+$pricing-card-surface-hover: linear-gradient(
+  92.6deg,
+  rgba(190, 78, 255, 0.06) 37.84%,
+  rgba(255, 74, 183, 0.06) 100%
+);
+$pricing-card-shadow-hover: none;
+
+$pricing-card-spec-bar: #FFEDF8CC;
+$pricing-card-feature-bg: linear-gradient(90deg, rgba(83, 45, 114, 0.1) 0%, rgba(83, 45, 114, 0.26) 50%, rgba(83, 45, 114, 0.1) 100%);
+
+$pricing-card-tag-bg: #913EF533;
+$pricing-card-check: #fff599;
+
+// Badge (Figma node 1:5604) — single state, no hover variant
+$pricing-card-badge-bg: linear-gradient(91.45deg, #ff4ab7 -5.07%, #c830b9 114.33%);
+$pricing-card-badge-text: #ffffff;
+
+// Spec dropdown (Figma node 1:5724)
+$pricing-card-spec-dropdown-bg: #9A42E8;
+$pricing-card-spec-dropdown-radius: 10px;
+$pricing-card-spec-dropdown-padding: 8px 6px;
+$pricing-card-spec-dropdown-gap: 4px;
+$pricing-card-spec-dropdown-row-radius: 6px;
+$pricing-card-spec-dropdown-row-bg: linear-gradient(90.03deg, rgba(249, 240, 237, 0.3) -0.01%, rgba(204, 203, 211, 0.16) 53.84%, rgba(225, 220, 223, 0.3) 99.04%);
+$pricing-card-spec-dropdown-row-min-height: 22px;
+$pricing-card-spec-dropdown-row-padding-x: 8px;
+$pricing-card-spec-dropdown-label-color: #FFFFFFB2;
+$pricing-card-spec-dropdown-value-color: #ffffff;
+$pricing-card-spec-dropdown-font-size: 14px;
+$pricing-card-spec-dropdown-line-height: 1.3;
+$pricing-card-spec-dropdown-letter-spacing: -4%;
+$pricing-card-spec-dropdown-min-width: 260px;
+
+.pricingCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: none;
+  padding: 18px 16px;
+  border: 1px solid $pricing-card-border-default;
+  border-radius: 28px;
+  background: $pricing-card-surface-default;
+  color: $pricing-card-text;
+  box-shadow: $pricing-card-shadow-default;
+  isolation: isolate;
+  transition:
+    border-color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: $pricing-card-surface-hover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1px;
+    background: $pricing-card-border-hover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+  }
+
+  @include tablet {
+    max-width: none;
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: transparent;
+      box-shadow: $pricing-card-shadow-hover;
+
+      &::after {
+        opacity: 0.5;
+      }
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    &:hover &__shadowLight {
+      transform: scale(3, 1);
+      left: calc(50% - 38px);
+      transition: transform 0.3 ease-in-out;
+      opacity: 1;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        #F9DDFD 50%,
+        transparent 100%,
+      );
+
+
+    }
+
+    &:hover &__header {
+      background-color: #C54092;
+    }
+
+    &:hover &__header &__title,
+    &:hover &__header &__priceValue,
+    &:hover &__header &__pricePeriod {
+      color: $pricing-card-text;
+    }
+  }
+
+  &__shadowLight {
+    position: absolute;
+    top: 0;
+    inset: -2px;
+    z-index: 100;
+    left: calc(50% - 38px);
+    width: 76px;
+    height: 4px;
+    border-radius: 999px;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+
+    opacity: 0.3;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      #e5c5d8 50%,
+      transparent 100%,
+    );
+
+    filter: blur(4px);
+
+  }
+
+  &__badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 3;
+    margin: 0;
+    padding: 3.5px 10px;
+    border-radius: 999px;
+    background: $pricing-card-badge-bg;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 140%;
+    letter-spacing: -0.2%;
+    text-transform: uppercase;
+    color: $pricing-card-badge-text;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+    isolation: isolate;
+
+    // border: 1px solid + border-image-source — via ::before (border-image ignores border-radius)
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -1px; // 1px border width
+      border-radius: inherit;
+      padding: 1px; // 1px border width
+      background: $pricing-card-border-hover; // border-image-source
+      pointer-events: none;
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+    }
+  }
+
+  &__header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 14px 12px;
+    background-color: #432B54;
+    border-radius: 16.67px;
+    transition: all 0.3s ease-in-out;
+    overflow: visible;
+  }
+
+  &__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__titleGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: $pricing-card-text;
+
+    @include tablet {
+      font-size: 24px;
+    }
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+  }
+
+  &__priceValue {
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: $pricing-card-accent;
+    transition: all 0.3s ease-in-out;
+
+    @include tablet {
+      font-size: 34px;
+    }
+  }
+
+  &__pricePeriod {
+    font-size: 16px;
+    line-height: 1.2;
+    color: $pricing-card-text-muted;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &__terminalStack {
+    color: $pricing-card-text;
+  }
+
+  &__specBar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 24.24px;
+    gap: 12px;
+    padding: 3.62px 5px 3.62px 9px;
+    border-radius: 999px;
+    background: $pricing-card-spec-bar;
+    backdrop-filter: blur(12.121212005615234px);
+    overflow: visible;
+  }
+
+  &__specText {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -2%;
+    color: #1e132d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include tablet {
+      font-size: 12px;
+    }
+  }
+
+  &__menu {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  &__menuButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #1e132d;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  &__menuDropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: $pricing-card-spec-dropdown-gap;
+    width: max-content;
+    min-width: $pricing-card-spec-dropdown-min-width;
+    padding: $pricing-card-spec-dropdown-padding;
+    border-radius: $pricing-card-spec-dropdown-radius;
+    background: $pricing-card-spec-dropdown-bg;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease-in-out,
+      visibility 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
+    transform: translateY(6px);
+  }
+
+  &__menuDetails {
+    display: flex;
+    flex-direction: column;
+    gap: $pricing-card-spec-dropdown-gap;
+    margin: 0;
+  }
+
+  &__menuDetailRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: $pricing-card-spec-dropdown-row-min-height;
+    padding: 0 $pricing-card-spec-dropdown-row-padding-x;
+    border-radius: $pricing-card-spec-dropdown-row-radius;
+    background: $pricing-card-spec-dropdown-row-bg;
+  }
+
+  &__menuDetailLabel {
+    margin: 0;
+    font-size: $pricing-card-spec-dropdown-font-size;
+    font-weight: 400;
+    line-height: $pricing-card-spec-dropdown-line-height;
+    letter-spacing: $pricing-card-spec-dropdown-letter-spacing;
+    color: $pricing-card-spec-dropdown-label-color;
+    white-space: nowrap;
+  }
+
+  &__menuDetailValue {
+    margin: 0;
+    font-size: $pricing-card-spec-dropdown-font-size;
+    font-weight: 400;
+    line-height: $pricing-card-spec-dropdown-line-height;
+    letter-spacing: $pricing-card-spec-dropdown-letter-spacing;
+    color: $pricing-card-spec-dropdown-value-color;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  @media (hover: hover) {
+    &__menu:hover &__menuButton {
+      transform: rotate(90deg);
+    }
+
+    &__menu:hover &__menuDropdown,
+    &__menu:focus-within &__menuDropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+  }
+
+  &__meta {
+    margin: 0;
+  }
+
+  &__metaRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgba(83, 45, 114, 0.1) 0%, rgba(83, 45, 114, 0.26) 50%, rgba(83, 45, 114, 0.1) 100%);
+
+  }
+
+  &__metaLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: $pricing-card-text;
+  }
+
+  &__metaIcon {
+    color: $pricing-card-text-muted;
+  }
+
+  &__metaValue {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.2;
+    color: $pricing-card-text-muted;
+  }
+
+  &__helpButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: $pricing-card-text-subtle;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $pricing-card-text-muted;
+    }
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__sectionTitle {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -4%;
+    text-transform: uppercase;
+    color: #F1EBFE;
+  }
+
+  &__featureList {
+    display: flex;
+    flex-direction: column;
+    gap: 3.03px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__featureItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 8px;
+    background: $pricing-card-feature-bg;
+    font-size: 14px;
+    line-height: 1.4;
+    color: $pricing-card-text;
+  }
+
+  &__featureIcon {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: $pricing-card-check;
+  }
+
+  &__tagList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__tag {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: $pricing-card-tag-bg;
+    font-size: 13px;
+    line-height: 1.2;
+    color: #FFEDF8;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: auto;
+    
+  }
+
+  @media (hover: hover) {
+    &__actions:hover &__buyButton {
+      color: white;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    &__actions:hover &__cartButton {
+      background-color: white;
+      color: $pricing-card-accent;
+    }
+  }
+
+  &__actionButton {
+    border: 1px solid $pricing-card-accent;
+    background-color: transparent;
+    color: $pricing-card-accent;
+    cursor: pointer;
+    font: inherit;
+    transition:
+      background-color 0.5s ease-in-out,
+      color 0.5s ease-in-out;
+  }
+
+  &__buyButton {
+    position: relative;
+    isolation: isolate;
+    z-index: 0;
+    flex: 1;
+    min-height: 52px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgb(235, 89, 179) 0%, rgb(191, 66, 180) 100%);
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+  }
+
+  &__cartButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border-radius: 50%;
+  }
+}
