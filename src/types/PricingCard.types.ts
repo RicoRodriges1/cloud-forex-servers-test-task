@@ -16,6 +16,7 @@ export interface PricingCardSpecDetail {
 }
 
 export interface PricingCardProps {
+  id?: string;
   title: string;
   price?: string | null;
   priceState?: "loading" | "ready" | "unavailable";

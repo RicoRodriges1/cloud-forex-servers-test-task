@@ -9,19 +9,21 @@ export function buildPlans({ staticPlans, apiTariffs, period, status, }) {
     const apiKey = PERIOD_TO_API_KEY[period];
     const periodLabel = PERIOD_DISPLAY_LABEL[period];
     return staticPlans.map((plan, index) => {
+        const apiTariff = findApiTariff(plan, apiTariffs);
         if (status === "loading") {
             return {
                 ...plan,
+                id: apiTariff?.id,
                 isBestChoice: index === 2,
                 price: undefined,
                 priceState: "loading",
                 period: periodLabel,
             };
         }
-        const apiTariff = findApiTariff(plan, apiTariffs);
         const apiPrice = apiTariff?.prices[apiKey];
         return {
             ...plan,
+            id: apiTariff?.id,
             isBestChoice: index === 2,
             price: apiPrice !== undefined ? apiPrice.toFixed(2) : null,
             priceState: apiPrice !== undefined ? "ready" : "unavailable",

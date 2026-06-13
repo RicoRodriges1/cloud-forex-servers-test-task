@@ -69,9 +69,6 @@ export default function Plans({
             <PricingCard
               {...plan}
               specs={selectedSpecs[plan.title] ?? plan.specs}
-              onBuy={() => {
-                console.info(`Buy plan: ${plan.title}`);
-              }}
               onMenuOptionSelect={(option) => {
                 setSelectedSpecs((current) => ({
                   ...current,

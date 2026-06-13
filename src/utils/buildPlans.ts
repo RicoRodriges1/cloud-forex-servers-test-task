@@ -47,9 +47,12 @@ export function buildPlans({
   const periodLabel = PERIOD_DISPLAY_LABEL[period];
 
   return staticPlans.map((plan, index) => {
+    const apiTariff = findApiTariff(plan, apiTariffs);
+
     if (status === "loading") {
       return {
         ...plan,
+        id: apiTariff?.id,
         isBestChoice: index === 2,
         price: undefined,
         priceState: "loading" as const,
@@ -57,11 +60,11 @@ export function buildPlans({
       };
     }
 
-    const apiTariff = findApiTariff(plan, apiTariffs);
     const apiPrice = apiTariff?.prices[apiKey];
 
     return {
       ...plan,
+      id: apiTariff?.id,
       isBestChoice: index === 2,
       price: apiPrice !== undefined ? apiPrice.toFixed(2) : null,
       priceState: apiPrice !== undefined ? ("ready" as const) : ("unavailable" as const),

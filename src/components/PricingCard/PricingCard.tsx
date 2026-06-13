@@ -14,6 +14,7 @@ import { formatSpecs } from "@/utils/formatSpecs";
 import slugify from "@/utils/slugify";
 
 export default function PricingCard({
+  id,
   title,
   price,
   priceState = "ready",
@@ -28,7 +29,6 @@ export default function PricingCard({
   buyLabel = "КУПИТЬ",
   terminalsLabel = "Terminals",
   specDetails,
-  onBuy,
   onTerminalsHelpClick,
   isBestChoice = false,
   bestChoiceLabel = "Best choice",
@@ -169,11 +169,10 @@ export default function PricingCard({
         </ul>
       </section>
 
-      <div className={styles.pricingCard__actions}>
+      <a href={id ? `/buy${id}` : "#"} className={styles.pricingCard__actions}>
         <button
           type="button"
           className={[actionButtonClassName, styles.pricingCard__buyButton].join(" ")}
-          onClick={onBuy}
           disabled={isPriceLoading}
         >
           {buyLabel}
@@ -185,7 +184,7 @@ export default function PricingCard({
         >
           <CartIcon />
         </button>
-      </div>
+      </a>
     </div>
   );
 }
