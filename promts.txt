@@ -1,0 +1,80 @@
+1.https://www.figma.com/design/QSm9uK1af5wDHTk9dyM9Cd/Test-mockup?node-id=1-4300&t=JuyhMX0E3U5jK2SB-0 Convert this Figma design into a production-ready reusable component React component. dont run buil to not ot create js files everywhere. Download svg files to assets folder or just leave empty divs instead. All scss files move to styles folder
+
+Requirements:
+- React + TypeScript
+- SCSS modules
+- BEM naming
+- responsive layout
+- semantic HTML
+- reusable structure
+- no inline styles
+- clean component architecture
+
+
+2.https://www.figma.com/design/QSm9uK1af5wDHTk9dyM9Cd/Test-mockup?node-id=1-5487&t=JuyhMX0E3U5jK2SB-0 
+це дизайн картки з ховером та без, плажка best choice - опціональна для карток, додай її як пропс необовязковий
+
+3.@src/components/DataCenterSelector.tsx @src/components/PricePeriodSelector.tsx у мене є ось цих два селектора, вони повинні бути керованими.
+Потрібно використати хук useTariffs для отримання тарифів, та відобразити їх в Plans, в залежності від того який датацентр та період обраний.
+Також має бути 4 плани (тарифи), як на прикріпленому скріні, а не 2 як зараз, і третій завжди має бути Best Choice.
+Перевірити які дані повертає хук.
+
+4.@src/api/zomroApi.ts в поле датацентр можна передавати стрінгу з декількома числами через кому: '12,17,19,21'. перероби всю логіку відповідно під такий кейс
+
+5.@src/api/apitest.js запусти цей файл через node та переглянь респонс та відкоригуй логіку 
+
+6.@src/utils/normalizeTariffs.ts потрібно явно описати всі типи, щоб не було any
+
+7.Покращ UX для блоку тарифів / pricing cards.
+
+Поточна проблема:
+
+Поки йде запит на сервер, користувач бачить пусті або некоректні ціни.
+При помилці запиту немає зрозумілого fallback UI.
+Загальний UX виглядає “ламаним” під час loading/error states.
+
+Що потрібно реалізувати:
+
+Loading state
+Поки fetch / API request знаходиться в pending state:
+НЕ показувати старі або пусті ціни.
+Замість цін показувати loader/spinner.
+Loader має виглядати акуратно та не ламати layout картки.
+Бажано зберегти стабільну висоту елементів, щоб уникнути layout shift.
+Кнопки та інтерактивні елементи при потребі зробити disabled.
+Error state
+Якщо сервер повернув error або request failed:
+Замість тарифів показати зрозумілий текст:
+“Failed to load pricing”
+або “Unable to fetch pricing plans”
+Додати кнопку Retry / Try again.
+Error state має виглядати частиною дизайну, а не plain text.
+Success state
+Після успішного response:
+плавно відобразити реальні ціни.
+прибрати loader без різких стрибків UI.
+додати невеликий fade transition якщо доречно.
+UX improvements
+Не допускати flashing контенту.
+Не показувати undefined/null values.
+Обробити edge cases:
+empty response
+partial data
+slow network
+Код має бути clean та production-ready.
+Використати зрозумілу структуру state:
+loading
+success
+error
+Tech requirements
+React + TypeScript.
+Використати conditional rendering.
+Якщо вже є state manager або react-query/swr — інтегрувати правильно.
+Компонент має бути легко масштабований.
+Додатково
+Додати skeleton/shimmer loader якщо це покращить UX більше ніж spinner.
+Мінімізувати CLS (layout shifts).
+Зробити UI responsive.
+Дотримуватись існуючого design system / SCSS architecture.
+
+11M tokens used Free model + few promts in chat gpt

@@ -16,6 +16,7 @@ import slugify from "@/utils/slugify";
 export default function PricingCard({
   title,
   price,
+  priceState = "ready",
   currency = "€",
   period = "month",
   specs,
@@ -38,6 +39,8 @@ export default function PricingCard({
   const tagsId = `${slugify(title)}-tags`;
   const actionButtonClassName = styles.pricingCard__actionButton;
   const detailRows = specDetails ?? buildSpecDetails(specs, terminalsCount);
+  const isPriceLoading = priceState === "loading";
+  const isPriceReady = priceState === "ready" && price != null && price !== "";
 
   return (
     <div className={rootClassName}>
@@ -54,10 +57,28 @@ export default function PricingCard({
         <div className={styles.pricingCard__heading}>
           <div className={styles.pricingCard__titleGroup}>
             <h2 className={styles.pricingCard__title}>{title}</h2>
-            <p className={styles.pricingCard__price}>
-              <span className={styles.pricingCard__priceValue}>
-                {currency} {price}
-              </span>
+            <p
+              className={styles.pricingCard__price}
+              aria-busy={isPriceLoading}
+              aria-live="polite"
+            >
+              {isPriceLoading ? (
+                <span
+                  className={styles.pricingCard__priceSkeleton}
+                  aria-hidden="true"
+                />
+              ) : isPriceReady ? (
+                <span
+                  className={[
+                    styles.pricingCard__priceValue,
+                    styles.pricingCard__priceValue_visible,
+                  ].join(" ")}
+                >
+                  {currency} {price}
+                </span>
+              ) : (
+                <span className={styles.pricingCard__priceUnavailable}>—</span>
+              )}
               <span className={styles.pricingCard__pricePeriod}>{period}</span>
             </p>
           </div>
@@ -153,12 +174,14 @@ export default function PricingCard({
           type="button"
           className={[actionButtonClassName, styles.pricingCard__buyButton].join(" ")}
           onClick={onBuy}
+          disabled={isPriceLoading}
         >
           {buyLabel}
         </button>
         <button
           type="button"
           className={[actionButtonClassName, styles.pricingCard__cartButton].join(" ")}
+          disabled={isPriceLoading}
         >
           <CartIcon />
         </button>

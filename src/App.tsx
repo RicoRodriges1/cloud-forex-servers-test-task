@@ -8,7 +8,7 @@ import type { DatacenterId, PricePeriod } from "@/types/pricing";
 export default function App() {
   const [datacenter, setDatacenter] = useState<DatacenterId>("poland");
   const [period, setPeriod] = useState<PricePeriod>("1 Month");
-  const { data, loading, error } = useTariffs();
+  const { data, status, refetch } = useTariffs();
 
   return (
     <main className="app">
@@ -24,8 +24,8 @@ export default function App() {
           datacenter={datacenter}
           period={period}
           tariffs={data}
-          loading={loading}
-          error={error}
+          status={status}
+          onRetry={refetch}
         />
       </div>
     </main>

@@ -7,22 +7,29 @@ export async function getPriceList(
   datacenter: string,
 ): Promise<ZomroPriceListResponse> {
   const params = new URLSearchParams({
-    func: 'v2.instances.order.pricelist',
-    out: 'json',
-    lang: 'en',
-    page: '1',
-    page_size: '999',
+    func: "v2.instances.order.pricelist",
+    out: "json",
+    lang: "en",
+    page: "1",
+    page_size: "999",
     datacenter,
   });
 
   const response = await fetch(API_URL, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type':
-        'application/x-www-form-urlencoded',
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     body: params.toString(),
   });
 
-  return response.json();
+  if (!response.ok) {
+    throw new Error(`Failed to fetch price list (${response.status})`);
+  }
+
+  try {
+    return (await response.json()) as ZomroPriceListResponse;
+  } catch {
+    throw new Error("Invalid price list response");
+  }
 }

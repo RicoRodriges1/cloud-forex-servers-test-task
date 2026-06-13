@@ -5,3 +5,24 @@
     @content;
   }
 }
+
+@mixin shimmer($duration: 1.4s) {
+  background: linear-gradient(
+    90deg,
+    rgba(190, 78, 255, 0.12) 0%,
+    rgba(255, 74, 183, 0.22) 50%,
+    rgba(190, 78, 255, 0.12) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer $duration ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}

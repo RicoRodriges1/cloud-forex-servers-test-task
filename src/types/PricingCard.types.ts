@@ -17,7 +17,8 @@ export interface PricingCardSpecDetail {
 
 export interface PricingCardProps {
   title: string;
-  price: string;
+  price?: string | null;
+  priceState?: "loading" | "ready" | "unavailable";
   currency?: string;
   period?: string;
   specs: PricingCardSpecs;

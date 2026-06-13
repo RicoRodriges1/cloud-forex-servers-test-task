@@ -263,6 +263,25 @@ $pricing-card-spec-dropdown-min-width: 260px;
     align-items: baseline;
     gap: 8px;
     margin: 0;
+    min-height: 40px;
+
+    @include tablet {
+      min-height: 34px;
+    }
+  }
+
+  &__priceSkeleton {
+    display: inline-block;
+    width: 120px;
+    height: 40px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    @include shimmer;
+
+    @include tablet {
+      width: 100px;
+      height: 34px;
+    }
   }
 
   &__priceValue {
@@ -271,7 +290,24 @@ $pricing-card-spec-dropdown-min-width: 260px;
     line-height: 1;
     letter-spacing: -0.04em;
     color: $pricing-card-accent;
-    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+
+    @include tablet {
+      font-size: 34px;
+    }
+
+    &_visible {
+      opacity: 1;
+    }
+  }
+
+  &__priceUnavailable {
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: $pricing-card-text-muted;
 
     @include tablet {
       font-size: 34px;
@@ -567,7 +603,14 @@ $pricing-card-spec-dropdown-min-width: 260px;
     font: inherit;
     transition:
       background-color 0.5s ease-in-out,
-      color 0.5s ease-in-out;
+      color 0.5s ease-in-out,
+      opacity 0.2s ease-in-out;
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
   }
 
   &__buyButton {
